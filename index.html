@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>THE MUSTER POINTZ — Fase 9</title>
+<link href="https://fonts.googleapis.com/css2?family=Staatliches&family=Doppio+One&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<!-- ================= PRELOADER OVERLAY ================= -->
+<div id="preloader">
+  <div class="preload-watermark">
+    The Muster PointZ | @alvitheman
+  </div>
+  <div class="preload-right-group">
+    <div class="preload-bar-track">
+      <div id="preloadBarFill"></div>
+    </div>
+    <div class="preload-meta">
+      <span id="preloadStatus">MEMUAT ASET...</span>
+      <span id="preloadPct">0%</span>
+    </div>
+  </div>
+</div>
+
+<div id="game"></div>
+
+<!-- ================= HUD (GDD §23) ================= -->
+<div id="hud">
+  <div id="topbar">
+    <div class="seg"><span class="lbl">NIGHT</span><span class="val" id="hNight">1</span></div>
+    <div class="seg"><span class="lbl">PHASE</span><span class="val amber" id="hPhase">—</span></div>
+    <div class="seg"><span class="lbl">TIMER</span><span class="val" id="hTimer">—</span></div>
+    <div class="seg"><span class="lbl">ZOMBIES</span><span class="val red" id="hWalkers">0</span></div>
+    <div class="seg"><span class="lbl">KILLS</span><span class="val" id="hKills">0</span></div>
+    <div class="seg"><span class="lbl">RESPECT</span><span class="val amber" id="hRes">0</span></div>
+  </div>
+
+  <!-- §23.6: progress bar malam (marker Wave 1-4) + jam sesi -->
+  <div id="nightrow">
+    <div id="nrNight">NIGHT 1</div>
+    <div id="nightbar">
+      <div class="nseg" id="ns0"></div><div class="nseg" id="ns1"></div>
+      <div class="nseg" id="ns2"></div><div class="nseg" id="ns3"></div>
+      <div id="nbMark"></div>
+    </div>
+    <div id="nrClock">00:00:00</div>
+  </div>
+
+  <div id="rail">
+    <div><b>LMB</b>select</div><div><b>RMB</b>move / lock</div>
+    <div><b>WASD</b>camera</div><div><b>SCROLL</b>zoom</div><div><b>ESC</b>pause</div>
+  </div>
+
+  <div id="toasts"></div>
+  <div id="banner"><div class="b2"></div><div class="b1"></div><div class="stripe"></div></div>
+  <div id="hint">RMB: gerak / kunci target · nyalakan perapian dari dekat · WASD: kamera</div>
+</div>
+
+<!-- §23.7 UI overhead 2D (dikelola main.js) -->
+<div id="overheads"></div>
+<div id="floaters"></div>
+
+<div id="defeat" class="screen" style="display:none;pointer-events:none">
+  <h1>NO SURVIVORS LEFT</h1>
+  <p class="sub2">Ending the Night</p>
+  <p id="defStats"></p>
+</div>
+
+<div id="pause" class="screen" style="display:none">
+  <h1>PAUSED</h1><p class="sub2">Tekan ESC untuk lanjut</p>
+</div>
+
+<!-- tombol dev: lompati Preparation Phase -->
+<div id="skipBtn" style="display:none">SKIP PREP</div>
+
+<!-- Three.js r128 — classic script (jalan dari file://) + fallback CDN -->
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/build/three.min.js"></script>
+<script>window.THREE||document.write('<script src="https://unpkg.com/three@0.128.0/build/three.min.js"><\/script>');</script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/shaders/CopyShader.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/shaders/LuminosityHighPassShader.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/postprocessing/EffectComposer.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/postprocessing/RenderPass.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/postprocessing/ShaderPass.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/postprocessing/UnrealBloomPass.js"></script>
+<script src="main.js"></script>
+</body>
+</html>

@@ -1,0 +1,197 @@
+/* ============================================================
+   THE MUSTER POINTZ — Fase 8 — HUD & UI per GDD §23
+   (Semua CSS panel/ikon fase 3+ — termasuk overlay QTE & label
+   HELP! F8b — diinjeksi main.js; file ini hanya HUD statis §23)
+============================================================ */
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{width:100%;height:100%;overflow:hidden;background:#0a0d12}
+body{font-family:'Doppio One',sans-serif;color:#e7dcc3;font-size:13px}
+#game canvas{position:fixed;inset:0;display:block;cursor:crosshair}
+
+#hud{position:fixed;inset:0;pointer-events:none;z-index:10}
+h1,.nm,.val,.lbl{font-family:'Staatliches',sans-serif}
+.val.amber{color:#d9a13b}
+.val.red{color:#c0453a}
+
+/* ---- §23.6 top bar ---- */
+#topbar{position:absolute;top:0;left:50%;transform:translateX(-50%);
+ display:flex;gap:16px;background:rgba(14,11,9,.88);border:1px solid #3b3122;
+ border-top:none;padding:5px 18px}
+#topbar .seg{text-align:center;line-height:1.1}
+#topbar .lbl{display:block;font-size:9px;color:#8f8264;letter-spacing:.15em}
+#topbar .val{font-size:20px}
+
+/* ---- §23.6 night progress bar + jam sesi ---- */
+#nightrow{position:absolute;top:46px;left:50%;transform:translateX(-50%);
+ display:flex;align-items:center;gap:10px;width:620px}
+#nrNight{font-family:'Staatliches',sans-serif;font-size:15px;color:#d9a13b;
+ white-space:nowrap;text-shadow:0 1px 0 #000}
+#nightbar{position:relative;flex:1;height:8px;display:flex;gap:3px}
+.nseg{flex:1;background:rgba(14,11,9,.8);border:1px solid #2e2820}
+.nseg.on{background:#4a3a1c;border-color:#7a6a2c}
+#nbMark{position:absolute;top:-4px;width:8px;height:16px;background:#d9a13b;
+ box-shadow:0 0 4px #d9a13b;margin-left:-4px}
+#nrClock{font-family:'Staatliches',sans-serif;font-size:14px;color:#9a8d6c;
+ white-space:nowrap;text-shadow:0 1px 0 #000}
+
+/* ---- rail ---- */
+#rail{position:absolute;right:12px;bottom:12px;display:grid;gap:4px;
+ font-size:10px;color:#8f8264;text-align:right}
+#rail b{font-family:'Staatliches',sans-serif;color:#e7dcc3;margin-right:6px;letter-spacing:.05em}
+
+/* ---- toasts ---- */
+#toasts{position:fixed;top:84px;right:14px;
+ display:flex;flex-direction:column;align-items:flex-end;gap:4px;
+ pointer-events:none;z-index:27}
+.toast{background:rgba(14,11,9,.94);border:1px solid #3b3122;border-left:3px solid #d9a13b;
+ padding:6px 14px;font-size:12px;max-width:560px;text-align:center;animation:tIn .25s}
+.toast.bad{border-left-color:#c0453a}
+.toast.good{border-left-color:#7fa35b}
+@keyframes tIn{from{opacity:0;transform:translateY(8px)}}
+
+/* ---- banner (§23.8) ---- */
+#banner{position:absolute;top:30%;left:0;right:0;text-align:center;opacity:0;
+ transition:opacity .5s}
+#banner .b1{font-family:'Staatliches',sans-serif;font-size:58px;text-shadow:0 3px 0 #000}
+#banner .b2{font-size:12px;color:#d9a13b;letter-spacing:.4em}
+#banner .stripe{width:280px;height:6px;margin:6px auto;
+ background:repeating-linear-gradient(45deg,#d9a13b 0 10px,#14100c 10px 20px)}
+
+/* ---- hint ---- */
+#hint{position:absolute;bottom:14px;left:50%;transform:translateX(-50%);
+ font-size:11px;color:#9a8d6c;background:rgba(14,11,9,.7);
+ padding:3px 12px;border:1px solid #262017}
+
+/* ============================================================
+   §23.7 — UI OVERHEAD 2D (DOM): selalu menghadap layar, tidak
+   ikut rotasi model, ukuran konstan di semua zoom.
+============================================================ */
+#overheads{position:fixed;inset:0;pointer-events:none;z-index:8;overflow:hidden}
+.ovh{position:absolute;left:0;top:0;text-align:center;white-space:nowrap;
+ font-family:'Staatliches',sans-serif;will-change:transform}
+.ovh .nm{font-size:12px;letter-spacing:.06em;line-height:1;
+ text-shadow:0 1px 2px #000,0 0 4px #000}
+.nmchr{color:#7ce87c}
+.nmzom{color:#ececec}
+.nmeli{color:#e6c34a}
+.nmbos{color:#ff5030}
+.ovh .lvl{display:inline-flex;align-items:center;justify-content:center;
+ width:15px;height:15px;border-radius:50%;background:#14100c;
+ border:1px solid #3b3122;color:#d9a13b;font-size:9px;margin-left:5px;vertical-align:1px}
+.ovh .bars{display:flex;flex-direction:column;gap:1px;width:58px;margin:3px auto 0}
+.ovh .bar2{height:4px;background:rgba(8,6,4,.85);border:1px solid rgba(0,0,0,.7);overflow:hidden}
+.ovh .bar2 i{display:block;width:100%;height:100%;transform-origin:left center}
+.ovh .hp i{background:#4fae4f}
+.ovh .en i{background:#e6c34a}
+.ovh .xpb i{background:#5a8fd0}
+.ovh .zhp i{background:#c0453a}
+
+/* ---- teks melayang: angka damage + notifikasi XP/Energy + skill ---- */
+#floaters{position:fixed;inset:0;pointer-events:none;z-index:9;overflow:hidden}
+.float{position:absolute;font-family:'Staatliches',sans-serif;font-size:17px;color:#e8d8b0;
+ text-shadow:0 2px 0 #000;transform:translate(-50%,-50%);white-space:nowrap}
+.float.dmgZ{color:#ffd070}
+.float.dmgC{color:#c0453a;font-size:20px}
+.float.heal{color:#7fa35b}
+.float.gainXp{color:#7fb3e8;font-size:14px}
+.float.gainEn{color:#e6c34a;font-size:13px}
+
+/* ---- layar penuh ---- */
+.screen{position:fixed;inset:0;z-index:30;display:flex;flex-direction:column;
+ align-items:center;justify-content:center;background:rgba(5,4,3,.72);pointer-events:auto}
+.screen h1{font-size:64px;color:#c0453a;text-shadow:0 3px 0 #000}
+#pause h1{color:#d9a13b}
+.screen .sub2{color:#9a8d6c;font-size:12px;margin:8px 0 16px}
+#defStats{font-size:13px;color:#cfc4a6;line-height:2;text-align:center}
+#btnRetry{width:240px;background:#171310;border:1px solid #3b3122;color:#e7dcc3;
+ font-family:'Staatliches',sans-serif;font-size:22px;padding:10px;cursor:pointer;letter-spacing:.1em}
+#btnRetry:hover{border-color:#c0453a;color:#c0453a}
+
+/* ---- tombol skip prep (dev) ---- */
+#skipBtn{position:fixed;top:130px;right:12px;z-index:12;background:#241c10;
+ border:1px solid #7a6a2c;color:#d9c26a;padding:5px 12px;font:12px monospace;
+ cursor:pointer;pointer-events:auto;display:none} /* P-N2b: turun dari 76 → 130 agar tidak bertabrakan dgn toast kanan-atas */
+#skipBtn:hover{border-color:#d9a13b;color:#d9a13b}
+
+/* ================= PRELOADER CUSTOM ================= */
+#preloader {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background: url('loading.jpg') center/cover no-repeat;
+  background-color: #0e0c09;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 32px 48px;
+  transition: opacity 0.5s ease, visibility 0.5s;
+}
+
+#preloader.done {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+/* Watermark di pojok kiri bawah */
+.preload-watermark {
+  position: absolute;
+  bottom: 28px;
+  left: 48px;
+  font-family: 'Doppio One', sans-serif;
+  font-size: 13px;
+  color: #e7dcc3;
+  letter-spacing: 0.08em;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.8);
+}
+
+/* Container untuk bar dan grup status di kanan bawah */
+.preload-right-group {
+  position: absolute;
+  bottom: 28px;
+  right: 48px;
+  width: 420px;
+  max-width: calc(100vw - 96px);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 8px;
+}
+
+/* Progress bar tipis memanjang dari kiri ke kanan */
+.preload-bar-track {
+  width: 100%;
+  height: 4px;
+  background: rgba(14, 12, 9, 0.6);
+  border-radius: 2px;
+  overflow: hidden;
+  border: 1px solid rgba(59, 49, 34, 0.4);
+}
+
+#preloadBarFill {
+  height: 100%;
+  width: 0%;
+  background: #e6c34a;
+  box-shadow: 0 0 8px rgba(230, 195, 74, 0.6);
+  transition: width 0.1s ease;
+}
+
+/* Group teks status aset dan persentase di bawah bar */
+.preload-meta {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  font-family: 'Doppio One', sans-serif;
+  font-size: 12px;
+  letter-spacing: 0.06em;
+  color: #cfc4a6;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.9);
+}
+
+#preloadStatus {
+  text-transform: uppercase;
+}
+
+#preloadPct {
+  color: #e6c34a;
+}
