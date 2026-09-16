@@ -11034,6 +11034,10 @@ function jombCleanup(){
 function openJombipedia(){
  const panel = $('jombPanel');
  if(!panel) return;
+
+ // TAMBAHKAN BARIS INI: Cegah pemanggilan ganda jika sudah di dalam Jombipedia
+ if(S.state === 'jombipedia') return; 
+
  if(S.ui) closeAllPanels();
  const menu = $('menuOverlay');
  if(menu) menu.style.display = 'none';
